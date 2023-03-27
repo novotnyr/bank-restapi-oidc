@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,14 @@ public class BankApplication {
         String userId = (String) jwt.getClaims().getOrDefault("sub", "");
         logger.info("Retrieving bank account balance: account: {}, user {}", accountId, userId);
         return BigDecimal.TEN;
+    }
+
+    @Bean
+    JwtAuthenticationConverter jwtAuthenticationConverter() {
+        var authenticationConverter = new JwtAuthenticationConverter();
+        authenticationConverter.setJwtGrantedAuthoritiesConverter(new KeycloakAuthoritiesConverter());
+        authenticationConverter.setPrincipalClaimName("preferred_username");
+        return authenticationConverter;
     }
 
     public static void main(String[] args) {
