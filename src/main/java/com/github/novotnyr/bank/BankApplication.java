@@ -6,10 +6,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
@@ -24,6 +26,13 @@ public class BankApplication {
         String userId = (String) jwt.getClaims().getOrDefault("sub", "");
         logger.info("Retrieving bank account balance: account: {}, user {}", accountId, userId);
         return BigDecimal.TEN;
+    }
+
+    @PostMapping("/accounts/{accountId}/withdrawals")
+    public BigDecimal withdrawTenCrowns(@PathVariable String accountId,
+                                        @CurrentSecurityContext(expression = "authentication.name") String userName) {
+        logger.info("Withdrawing 10 SKK: account: {}, user {}", accountId, userName);
+        return BigDecimal.ZERO;
     }
 
     @Bean

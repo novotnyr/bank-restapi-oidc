@@ -11,3 +11,7 @@ grant_type=password&client_id=megabank&scope=openid&username=harald&password=Yei
 ### Retrieve bank balance
 http://localhost:8888/accounts/1/balance
 Authorization: Bearer {{jwt}}
+
+### Withdraw
+POST http://localhost:8888/accounts/1/withdrawals
+Authorization: Bearer {{jwt}}
