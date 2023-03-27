@@ -1,1 +1,13 @@
+### Get JWT Token
+POST http://localhost:8080/realms/master/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=megabank&scope=openid&username=harald&password=Yei8eejaiJeith
+
+> {%
+    client.global.set("jwt", response.body.access_token)
+%}
+
+### Retrieve bank balance
 http://localhost:8888/accounts/1/balance
+Authorization: Bearer {{jwt}}
