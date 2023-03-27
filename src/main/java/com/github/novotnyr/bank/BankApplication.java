@@ -42,7 +42,7 @@ public class BankApplication {
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         var authenticationConverter = new JwtAuthenticationConverter();
-        authenticationConverter.setJwtGrantedAuthoritiesConverter(new KeycloakAuthoritiesConverter());
+        authenticationConverter.setJwtGrantedAuthoritiesConverter(new KeycloakClaimRoleAuthoritiesConverter("megabank"));
         authenticationConverter.setPrincipalClaimName("preferred_username");
         return authenticationConverter;
     }
