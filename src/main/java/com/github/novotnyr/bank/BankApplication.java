@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -18,6 +20,7 @@ import java.math.BigDecimal;
 
 @SpringBootApplication
 @RestController
+@EnableMethodSecurity
 public class BankApplication {
     public static final Logger logger = LoggerFactory.getLogger(BankApplication.class);
 
@@ -29,6 +32,7 @@ public class BankApplication {
     }
 
     @PostMapping("/accounts/{accountId}/withdrawals")
+    @PreAuthorize("hasAuthority('withdrawer')")
     public BigDecimal withdrawTenCrowns(@PathVariable String accountId,
                                         @CurrentSecurityContext(expression = "authentication.name") String userName) {
         logger.info("Withdrawing 10 SKK: account: {}, user {}", accountId, userName);
